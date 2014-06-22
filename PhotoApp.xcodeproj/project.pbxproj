@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E740EED1957800900A933C8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E740EEC1957800900A933C8 /* ViewController.m */; };
 		7EF5A41519500EA4007DAD6C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF5A41419500EA4007DAD6C /* Foundation.framework */; };
 		7EF5A41719500EA4007DAD6C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF5A41619500EA4007DAD6C /* CoreGraphics.framework */; };
 		7EF5A41919500EA4007DAD6C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF5A41819500EA4007DAD6C /* UIKit.framework */; };
@@ -43,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3E740EEB1957800900A933C8 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		3E740EEC1957800900A933C8 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		7EF5A41119500EA4007DAD6C /* PhotoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF5A41419500EA4007DAD6C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7EF5A41619500EA4007DAD6C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -151,6 +154,8 @@
 			isa = PBXGroup;
 			children = (
 				7EF5A42319500EA4007DAD6C /* DJAppDelegate.h */,
+				3E740EEB1957800900A933C8 /* ViewController.h */,
+				3E740EEC1957800900A933C8 /* ViewController.m */,
 				7EF5A42419500EA4007DAD6C /* DJAppDelegate.m */,
 				7EF5A4571950109F007DAD6C /* DJViewController.h */,
 				7EF5A4581950109F007DAD6C /* DJViewController.m */,
@@ -287,6 +292,7 @@
 			files = (
 				7EF5A42519500EA4007DAD6C /* DJAppDelegate.m in Sources */,
 				7EF5A4591950109F007DAD6C /* DJViewController.m in Sources */,
+				3E740EED1957800900A933C8 /* ViewController.m in Sources */,
 				7EF5A42119500EA4007DAD6C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,6 +498,7 @@
 				7EF5A43F19500EA4007DAD6C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7EF5A44019500EA4007DAD6C /* Build configuration list for PBXNativeTarget "PhotoAppTests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +507,7 @@
 				7EF5A44219500EA4007DAD6C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
