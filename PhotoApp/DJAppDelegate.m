@@ -9,6 +9,7 @@
 #import "DJAppDelegate.h"
 #import <Parse/Parse.h>
 #import "DJViewController.h"
+#import "ViewController.h"
 
 @implementation DJAppDelegate
 
@@ -22,7 +23,9 @@
                   clientKey:@"TqC0H4zYXcxkwEb0kuCLwrQ1gaUSPntvF8GcIMlx"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     DJViewController * dvc = [[DJViewController alloc] init];
-    self.window.rootViewController = dvc;
+    
+    ViewController * vc = [[ViewController alloc] init];
+    self.window.rootViewController = vc;
     return YES;
 }
 
