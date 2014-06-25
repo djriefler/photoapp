@@ -9,7 +9,6 @@
 #import "DJAppDelegate.h"
 #import <Parse/Parse.h>
 #import "DJViewController.h"
-#import "ViewController.h"
 
 @implementation DJAppDelegate
 
@@ -23,9 +22,29 @@
                   clientKey:@"TqC0H4zYXcxkwEb0kuCLwrQ1gaUSPntvF8GcIMlx"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     DJViewController * dvc = [[DJViewController alloc] init];
+    self.window.rootViewController = dvc;
     
-    ViewController * vc = [[ViewController alloc] init];
-    self.window.rootViewController = vc;
+    // Parse Check user
+    PFUser *currentUser = [PFUser currentUser];
+    if (currentUser) {
+        [self refresh: nil];
+    }
+    else {
+        // Dummy username and password
+        PFUser * user = [PFUser user];
+        user.username = @"DJ";
+        user.password = @"password";
+        user.email = @"djriefler@gmail.com";
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
+            if (!error) {
+                [self refresh: nil];
+            } else {
+                [PFUser logInWithUsername:@"DJ" password:@"password"];
+                [self refresh: nil];
+            }
+        }];
+    }
+    
     return YES;
 }
 
