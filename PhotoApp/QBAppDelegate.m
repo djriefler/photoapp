@@ -6,45 +6,27 @@
 //  Copyright (c) 2014 Duncan Riefler. All rights reserved.
 //
 
-#import "DJAppDelegate.h"
+#import "QBAppDelegate.h"
 #import <Parse/Parse.h>
-#import "DJViewController.h"
+#import "QBViewController.h"
 
-@implementation DJAppDelegate
+@implementation QBAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    
+    // Connect to Parse backend
     [Parse setApplicationId:@"Zqyq6pTT8OoWmPxeGr9JwX2gnDDCQY23CfO6Ptpw"
                   clientKey:@"TqC0H4zYXcxkwEb0kuCLwrQ1gaUSPntvF8GcIMlx"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    DJViewController * dvc = [[DJViewController alloc] init];
+    
+    QBViewController * dvc = [[QBViewController alloc] init];
     self.window.rootViewController = dvc;
-    
-    // Parse Check user
-    PFUser *currentUser = [PFUser currentUser];
-    if (currentUser) {
-        [self refresh: nil];
-    }
-    else {
-        // Dummy username and password
-        PFUser * user = [PFUser user];
-        user.username = @"DJ";
-        user.password = @"password";
-        user.email = @"djriefler@gmail.com";
-        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * error) {
-            if (!error) {
-                [self refresh: nil];
-            } else {
-                [PFUser logInWithUsername:@"DJ" password:@"password"];
-                [self refresh: nil];
-            }
-        }];
-    }
-    
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 

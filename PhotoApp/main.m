@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "DJAppDelegate.h"
+#import "QBAppDelegate.h"
 
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([DJAppDelegate class]));
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([QBAppDelegate class]));
     }
 }

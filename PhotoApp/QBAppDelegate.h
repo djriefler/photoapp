@@ -1,5 +1,5 @@
 //
-//  DJViewController.h
+//  DJAppDelegate.h
 //  PhotoApp
 //
 //  Created by Duncan Riefler on 6/16/14.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DJViewController : UIViewController
+@interface QBAppDelegate : UIResponder <UIApplicationDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
 
 @end
