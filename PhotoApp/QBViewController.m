@@ -77,7 +77,7 @@
     self.imagePicker.cameraViewTransform = scale;
     
     [_imagePicker setDelegate:self];
-    [self presentViewController:_imagePicker animated:YES completion:nil];
+    [self presentViewController:_imagePicker animated:NO completion:nil];
     
     // Create and display custom overlay
     // Don't show default controls
@@ -117,7 +117,7 @@
     [self.imageView setImage:image];
     
     // Dismiss the imagePicker which will reveal the imageView we have placed behind it
-    [self.imagePicker dismissViewControllerAnimated:YES completion:NULL];
+    [self.imagePicker dismissViewControllerAnimated:NO completion:NULL];
     self.imagePicker = nil;
     self.cameraOverlay = nil;
     
