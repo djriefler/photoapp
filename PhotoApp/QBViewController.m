@@ -19,6 +19,7 @@
 @property (nonatomic)  UIImageView * imageView;
 
 @property (nonatomic) UIButton * cancelButton;
+@property (nonatomic) UIButton * sendButton;
 
 @end
 
@@ -44,11 +45,19 @@
     // now let's set it as the image on the screen
     [self.view addSubview:self.imageView];
     
+    // Set up cancel button
     _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 60, 40, 40)];
     [self.view addSubview:_cancelButton ];
     [_cancelButton setBackgroundColor:[UIColor redColor]];
     [_cancelButton addTarget:self action:@selector(cancelTakingPicture) forControlEvents:UIControlEventTouchUpInside];
     [_cancelButton setHidden:YES];
+    
+    // Set up send button (will send photo to the cloud)
+    _sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, self.view.frame.size.height - 60, 40, 40)];
+    [self.view addSubview:_sendButton];
+    [_sendButton setBackgroundColor:[UIColor greenColor]];
+    [_sendButton addTarget:self action:@selector(sendPicture) forControlEvents:UIControlEventTouchUpInside];
+    [_sendButton setHidden:YES];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -100,6 +109,49 @@
     [self setupImagePicker];
 }
 
+- (void) sendPicture
+{
+    // Resize image
+    UIImage * image = _imageView.image;
+    UIGraphicsBeginImageContext(CGSizeMake(640, 960));
+    [image drawInRect:CGRectMake(0, 0, 640, 960)];
+    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    // Convert to data to send to the cloud
+    NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
+    [self uploadImage: imageData];
+}
+
+- (void) uploadImage:(NSData *) imageData
+{
+    PFFile * imageFile = [PFFile fileWithName:@"snap.jpg" data:imageData];
+    
+    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+        if (!error) {
+            PFObject * userPhoto = [PFObject objectWithClassName:@"UserPhoto"];
+            [userPhoto setObject:imageFile forKey:@"imageFile"];
+            PFUser * user = [PFUser currentUser];
+            [userPhoto setObject:user forKey:@"user"];
+            
+            [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+                    NSLog(@"UserPhoto object successfully created!");
+                }
+                else {
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+        }
+        else {
+            
+        }
+        
+    } progressBlock:^(int percentDone) {
+                               // Update your progress spinner here. percentDone will be between 0 and 100.
+//                               HUD.progress = (float)percentDone/100;
+                           }];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -123,6 +175,8 @@
     
     [_cancelButton setHidden:NO];
     [_cancelButton setUserInteractionEnabled:YES];
+    [_sendButton setHidden:NO];
+    [_sendButton setUserInteractionEnabled:YES];
 }
 
 

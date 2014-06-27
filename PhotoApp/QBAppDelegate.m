@@ -23,6 +23,25 @@
                   clientKey:@"TqC0H4zYXcxkwEb0kuCLwrQ1gaUSPntvF8GcIMlx"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    // Simple way to create a user or log in the existing user
+    // For your app, you will probably want to present your own login screen
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (!currentUser) {
+        // Dummy username and password
+        PFUser *user = [PFUser user];
+        user.username = @"John";
+        user.password = @"password";
+        user.email = @"Matt@example.com";
+        
+        [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (error) {
+                // Assume the error is because the user already existed.
+                [PFUser logInWithUsername:@"Matt" password:@"password"];
+            }
+        }];
+    }
+    
     QBViewController * dvc = [[QBViewController alloc] init];
     self.window.rootViewController = dvc;
     [self.window makeKeyAndVisible];
