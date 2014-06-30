@@ -8,6 +8,7 @@
 
 #import "QBViewController.h"
 #import "QBCameraOverlayView.h"
+#import "QBContactsViewController.h"
 #import <Parse/Parse.h>
 
 @interface QBViewController ()
@@ -56,7 +57,7 @@
     _sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, self.view.frame.size.height - 60, 40, 40)];
     [self.view addSubview:_sendButton];
     [_sendButton setBackgroundColor:[UIColor greenColor]];
-    [_sendButton addTarget:self action:@selector(sendPicture) forControlEvents:UIControlEventTouchUpInside];
+    [_sendButton addTarget:self action:@selector(loadContactsPage) forControlEvents:UIControlEventTouchUpInside];
     [_sendButton setHidden:YES];
 }
 
@@ -107,6 +108,13 @@
 {
     [_cancelButton setHidden:YES];
     [self setupImagePicker];
+}
+
+- (void) loadContactsPage
+{
+    QBContactsViewController * cvc = [[QBContactsViewController alloc] initWithStyle:UITableViewStylePlain];
+    [self presentViewController:cvc animated:NO completion:nil];
+    
 }
 
 - (void) sendPicture

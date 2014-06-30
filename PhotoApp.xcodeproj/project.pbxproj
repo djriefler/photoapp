@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7EA8AA16195A824500A9D413 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8AA15195A824500A9D413 /* MBProgressHUD.m */; };
 		7EA8AA1A195BC09400A9D413 /* QBCameraOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8AA19195BC09400A9D413 /* QBCameraOverlayView.m */; };
+		7EA8AA1D195E56EE00A9D413 /* QBContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8AA1C195E56EE00A9D413 /* QBContactsViewController.m */; };
 		7EF5A41519500EA4007DAD6C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF5A41419500EA4007DAD6C /* Foundation.framework */; };
 		7EF5A41719500EA4007DAD6C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF5A41619500EA4007DAD6C /* CoreGraphics.framework */; };
 		7EF5A41919500EA4007DAD6C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF5A41819500EA4007DAD6C /* UIKit.framework */; };
@@ -49,6 +50,8 @@
 		7EA8AA15195A824500A9D413 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		7EA8AA18195BC09400A9D413 /* QBCameraOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBCameraOverlayView.h; sourceTree = "<group>"; };
 		7EA8AA19195BC09400A9D413 /* QBCameraOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBCameraOverlayView.m; sourceTree = "<group>"; };
+		7EA8AA1B195E56EE00A9D413 /* QBContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBContactsViewController.h; sourceTree = "<group>"; };
+		7EA8AA1C195E56EE00A9D413 /* QBContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBContactsViewController.m; sourceTree = "<group>"; };
 		7EF5A41119500EA4007DAD6C /* PhotoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF5A41419500EA4007DAD6C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7EF5A41619500EA4007DAD6C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -169,6 +172,8 @@
 				7EF5A42419500EA4007DAD6C /* QBAppDelegate.m */,
 				7EF5A4571950109F007DAD6C /* QBViewController.h */,
 				7EF5A4581950109F007DAD6C /* QBViewController.m */,
+				7EA8AA1B195E56EE00A9D413 /* QBContactsViewController.h */,
+				7EA8AA1C195E56EE00A9D413 /* QBContactsViewController.m */,
 				7EA8AA18195BC09400A9D413 /* QBCameraOverlayView.h */,
 				7EA8AA19195BC09400A9D413 /* QBCameraOverlayView.m */,
 				7EA8AA17195A824D00A9D413 /* MBProgressHUD */,
@@ -305,6 +310,7 @@
 			files = (
 				7EA8AA1A195BC09400A9D413 /* QBCameraOverlayView.m in Sources */,
 				7EF5A42519500EA4007DAD6C /* QBAppDelegate.m in Sources */,
+				7EA8AA1D195E56EE00A9D413 /* QBContactsViewController.m in Sources */,
 				7EF5A4591950109F007DAD6C /* QBViewController.m in Sources */,
 				7EF5A42119500EA4007DAD6C /* main.m in Sources */,
 				7EA8AA16195A824500A9D413 /* MBProgressHUD.m in Sources */,
