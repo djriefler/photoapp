@@ -8,11 +8,10 @@
 
 #import "QBContactsViewController.h"
 #import <AddressBook/AddressBook.h>
+#import "QBUserStore.h"
 
 @interface QBContactsViewController ()
-{
-    NSArray * contacts;
-}
+
 @end
 
 @implementation QBContactsViewController
@@ -21,7 +20,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
@@ -39,14 +38,9 @@
         if (granted) {
             ABRecordRef source = ABAddressBookCopyDefaultSource(addressBook);
             NSArray *myContacts = (__bridge NSArray *)(ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, kABPersonSortByFirstName));
-            contacts = [NSArray arrayWithArray:myContacts];
-            
-            for (id person in contacts) {
-                NSString * name = (__bridge NSString *)(ABRecordCopyValue((__bridge ABRecordRef)(person), kABPersonFirstNameProperty));
-                NSLog(@"%@",name);
-            }
+            [[QBUserStore sharedInstance] addContacts:myContacts];
+            [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
             [[self tableView] reloadData];
-            
         }
         else {
             NSLog(@"%@", error);
@@ -71,28 +65,40 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [contacts count];
+    return [[[QBUserStore sharedInstance] contacts] count]-1;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ContactCell"];
-    
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:@"ContactCell"];
     }
-    ABRecordRef person = (__bridge ABRecordRef)([contacts objectAtIndex:[indexPath row]]);
+    ABRecordRef person = (__bridge ABRecordRef)([[[QBUserStore sharedInstance] contacts] objectAtIndex:[indexPath row]]);
     NSString * firstName = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
     NSString * lastName = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
+    NSString * space = [NSString stringWithFormat:@" "];
     if (firstName != nil && lastName != nil) {
-        NSString * fullName = [firstName stringByAppendingString:lastName];
+        NSString * fullName = [firstName stringByAppendingString:space];
+        fullName = [fullName stringByAppendingString:lastName];
         [[cell textLabel] setText:fullName];
     }
     return cell;
 }
 
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.
