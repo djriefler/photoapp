@@ -29,8 +29,14 @@
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    [self setTitle:@"Send To..."];
+//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:uiba
+//                                                                                          target:self
+//                                                                                          action:@selector(returnToCameraView)];
+    UIImage * backArrow = [UIImage imageNamed:@"arrow2.png"];
+    UIImage * backArrow2 = [UIImage imageWithCGImage:backArrow.CGImage scale:backArrow.scale orientation:UIImageOrientationLeft];
+    UIBarButtonItem * backButton = [[UIBarButtonItem alloc] initWithImage:backArrow2 style:UIBarButtonItemStylePlain target:self action:@selector(returnToCameraView)];
+    [self.navigationItem setLeftBarButtonItem:backButton];
     
     CFErrorRef *error = NULL;
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, error);
@@ -46,6 +52,11 @@
             NSLog(@"%@", error);
         }
     });
+}
+
+- (void) returnToCameraView
+{
+    [self.delegate dismissContactsViewController];
 }
 
 - (void)didReceiveMemoryWarning

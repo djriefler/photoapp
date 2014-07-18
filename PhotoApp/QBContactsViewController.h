@@ -10,4 +10,12 @@
 
 @interface QBContactsViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property id delegate;
+
+@end
+
+@protocol QBContactsViewControllerDelegate
+
+- (void) dismissContactsViewController;
+
 @end

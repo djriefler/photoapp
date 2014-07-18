@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import <stdlib.h>
+#import "QBContactsViewController.h"
 #import "MBProgressHUD.h"
 
-@interface QBViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface QBViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, QBContactsViewControllerDelegate>
 {
 
 }

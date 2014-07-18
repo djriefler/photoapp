@@ -13,6 +13,9 @@
 @end
 
 @implementation QBMessageTableViewController
+{
+    
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {

@@ -113,8 +113,14 @@
 - (void) loadContactsPage
 {
     QBContactsViewController * cvc = [[QBContactsViewController alloc] initWithStyle:UITableViewStylePlain];
-    [self presentViewController:cvc animated:NO completion:nil];
-    
+    cvc.delegate = self;
+    UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:cvc];
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void) dismissContactsViewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) sendPicture

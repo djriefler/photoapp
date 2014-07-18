@@ -42,6 +42,12 @@
 - (void) addContacts:(NSArray *)cntcts
 {
     [contacts addObjectsFromArray:cntcts];
+    [self cleanContacts];
+}
+
+- (void) cleanContacts
+{
+    
 }
 
 - (NSArray *) contacts
