@@ -10,5 +10,5 @@
 
 @interface QBCameraOverlayView : UIView
 @property (nonatomic) UIButton * captureImagebutton;
-
+@property (nonatomic) UIButton * flipCameraButton;
 @end
