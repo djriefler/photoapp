@@ -36,7 +36,7 @@
         
         //set up flip camera view button
         self.flipCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - FLIP_CAMERA_BUTTON_WIDTH/2,20, FLIP_CAMERA_BUTTON_WIDTH, FLIP_CAMERA_BUTTON_HEIGHT)];
-        [self.flipCameraButton setBackgroundColor:[UIColor blueColor]];
+        [self.flipCameraButton setBackgroundColor:[UIColor lightGrayColor]];
         [self.flipCameraButton setUserInteractionEnabled:YES];
         [self addSubview:self.flipCameraButton];
     }
