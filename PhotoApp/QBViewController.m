@@ -97,6 +97,19 @@
     
     // Set the imageCaptureButton in the CameraOverlayClass to take a picture when tapped on
     [_cameraOverlay.captureImagebutton addTarget:self action:@selector(takePicture) forControlEvents:UIControlEventTouchUpInside];
+    
+    //Set the flipCameraButton in the CameraOverlayClass to take a picture when tapped on
+    [_cameraOverlay.flipCameraButton addTarget:self action:@selector(flipCamera) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void) flipCamera
+{
+    if(_imagePicker.cameraDevice == UIImagePickerControllerCameraDeviceRear) {
+        _imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    }
+    else {
+        _imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+    }
 }
 
 - (void) takePicture
