@@ -113,6 +113,7 @@
 - (void) loadContactsPage
 {
     QBContactsViewController * cvc = [[QBContactsViewController alloc] initWithStyle:UITableViewStylePlain];
+    cvc.image = _imageView.image;
     cvc.delegate = self;
     UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:cvc];
     [self presentViewController:navController animated:YES completion:nil];

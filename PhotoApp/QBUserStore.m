@@ -5,6 +5,7 @@
 //  Created by Duncan Riefler on 7/10/14.
 //  Copyright (c) 2014 Duncan Riefler. All rights reserved.
 //
+// This is a singleton that stores all of the user data
 
 #import "QBUserStore.h"
 

@@ -10,4 +10,7 @@
 
 @interface QBUser : PFUser
 
+@property NSString * firstName;
+@property NSString * lastName;
+
 @end

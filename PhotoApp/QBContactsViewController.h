@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface QBContactsViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+@interface QBContactsViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate>
 
 @property id delegate;
+@property UIImage * image;
 
 @end
 

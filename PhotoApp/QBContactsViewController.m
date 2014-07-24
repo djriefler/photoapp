@@ -11,7 +11,9 @@
 #import "QBUserStore.h"
 
 @interface QBContactsViewController ()
-
+{
+    NSMutableArray * recipients;
+}
 @end
 
 @implementation QBContactsViewController
@@ -20,7 +22,8 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-
+        recipients = [[NSMutableArray alloc] init];
+        
     }
     return self;
 }
@@ -29,14 +32,21 @@
 {
     [super viewDidLoad];
     
+    // Setup navbar
     [self setTitle:@"Send To..."];
-//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:uiba
-//                                                                                          target:self
-//                                                                                          action:@selector(returnToCameraView)];
+    
+    // Left Nav Button
     UIImage * backArrow = [UIImage imageNamed:@"arrow2.png"];
     UIImage * backArrow2 = [UIImage imageWithCGImage:backArrow.CGImage scale:backArrow.scale orientation:UIImageOrientationLeft];
-    UIBarButtonItem * backButton = [[UIBarButtonItem alloc] initWithImage:backArrow2 style:UIBarButtonItemStylePlain target:self action:@selector(returnToCameraView)];
-    [self.navigationItem setLeftBarButtonItem:backButton];
+    UIBarButtonItem * leftButton = [[UIBarButtonItem alloc] initWithImage:backArrow2 style:UIBarButtonItemStylePlain target:self action:@selector(returnToCameraView)];
+    [self.navigationItem setLeftBarButtonItem:leftButton];
+    
+    // Right Nav Button
+    UIBarButtonItem * rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"send.png"]
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(sendPhoto)];
+    [self.navigationItem setRightBarButtonItem:rightButton];
     
     CFErrorRef *error = NULL;
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, error);
@@ -57,6 +67,26 @@
 - (void) returnToCameraView
 {
     [self.delegate dismissContactsViewController];
+}
+
+- (void) sendPhoto
+{
+    MFMessageComposeViewController * messageComposer = [[MFMessageComposeViewController alloc] init];
+    // Check to see if the user can send texts
+    if ([MFMessageComposeViewController canSendText]) {
+        // Check to see if they can send attachments
+        if ([MFMessageComposeViewController canSendAttachments]) {
+            messageComposer.body = @"You got a message from this user";
+            NSData * pictureData = UIImagePNGRepresentation(self.image);
+            [messageComposer addAttachmentData:pictureData typeIdentifier:@"public.image" filename:@"image.png"];
+            messageComposer.recipients = recipients;
+            messageComposer.messageComposeDelegate = self;
+            [self presentViewController:messageComposer animated:YES completion:nil];
+        }
+        else {
+            
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,10 +135,31 @@
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        ABRecordRef person = (__bridge ABRecordRef)([[[QBUserStore sharedInstance] contacts] objectAtIndex:[indexPath row]]);
+        NSString * number = [self phoneNumberForPerson:person];
+        [recipients addObject: number];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
+}
+
+- (NSString *) phoneNumberForPerson: (ABRecordRef) person
+{
+    ABMultiValueRef phones = (__bridge ABMultiValueRef)((__bridge NSString *) ABRecordCopyValue(person, kABPersonPhoneProperty));
+    NSString * mobileLabel;
+    NSString * mobileNumber = @"";
+    for (CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+        mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
+        if ([mobileLabel isEqualToString:(NSString *) kABPersonPhoneIPhoneLabel] || [mobileLabel isEqualToString:(NSString *) kABPersonPhoneMobileLabel]) {
+            mobileNumber = (__bridge NSString *) ABMultiValueCopyValueAtIndex(phones, i);
+            break;
+        }
+    }
+    if ([mobileNumber  isEqualToString: @""]) {
+        mobileNumber = (__bridge NSString *) ABMultiValueCopyValueAtIndex(phones, 0);
+    }
+    return mobileNumber;
 }
 
 /*
