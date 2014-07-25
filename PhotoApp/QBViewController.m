@@ -82,7 +82,7 @@
     //Camera is 426 * 320. Screen height is 568.  Multiply by 1.333 in 5 inch to fill vertical
     CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 71.0); //This slots the preview exactly in the middle of the screen by moving it down 71 points
     self.imagePicker.cameraViewTransform = translate;
-    
+
     CGAffineTransform scale = CGAffineTransformScale(translate, 1.333333, 1.333333);
     self.imagePicker.cameraViewTransform = scale;
     
@@ -114,6 +114,12 @@
 
 - (void) takePicture
 {
+    if(_imagePicker.cameraDevice == UIImagePickerControllerCameraDeviceRear) {
+        self.imageView.transform = CGAffineTransformMakeScale(1.33, 1.0);
+    }
+    else {
+        self.imageView.transform = CGAffineTransformMakeScale(-1.33, 1.0);
+    }
     [self.imagePicker takePicture];
 }
 
