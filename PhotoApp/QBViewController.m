@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     // Set up image view where the image that we take will appear
     self.imageView = [[UIImageView alloc] init];
     // This is the wrong frame size. TODO: FIX
@@ -143,6 +144,29 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+# pragma mark - Image Picker Delegate Methods
+// called when a picture has been taken
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // This is the image that was taken
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    
+    // Set the imageView's image to this image.
+    [self.imageView setImage:image];
+    
+    // Dismiss the imagePicker which will reveal the imageView we have placed behind it
+    [self.imagePicker dismissViewControllerAnimated:NO completion:NULL];
+    self.imagePicker = nil;
+    self.cameraOverlay = nil;
+    
+    [_cancelButton setHidden:NO];
+    [_cancelButton setUserInteractionEnabled:YES];
+    [_sendButton setHidden:NO];
+    [_sendButton setUserInteractionEnabled:YES];
+}
+
+
+#pragma mark - Parse related methods
 - (void) sendPicture
 {
     // Resize image
@@ -186,33 +210,18 @@
                            }];
 }
 
+#pragma mark - Etc
+
+- (BOOL) prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-# pragma mark - Image Picker Delegate Methods
-// called when a picture has been taken
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    // This is the image that was taken
-    UIImage *image = info[UIImagePickerControllerOriginalImage];
-    
-    // Set the imageView's image to this image.
-    [self.imageView setImage:image];
-    
-    // Dismiss the imagePicker which will reveal the imageView we have placed behind it
-    [self.imagePicker dismissViewControllerAnimated:NO completion:NULL];
-    self.imagePicker = nil;
-    self.cameraOverlay = nil;
-    
-    [_cancelButton setHidden:NO];
-    [_cancelButton setUserInteractionEnabled:YES];
-    [_sendButton setHidden:NO];
-    [_sendButton setUserInteractionEnabled:YES];
-}
-
 
 /*
 #pragma mark - Navigation
