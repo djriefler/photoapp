@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface QBUserStore : NSObject
+@interface QBUserContacts : NSObject
 
-+ (QBUserStore *) sharedInstance;
++ (QBUserContacts *) sharedInstance;
 - (NSArray *) contacts;
 - (void) addContact:(id) contact;
 - (void) addContacts: (NSArray *) cntcts;

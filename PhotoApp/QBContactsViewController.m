@@ -8,7 +8,7 @@
 
 #import "QBContactsViewController.h"
 #import <AddressBook/AddressBook.h>
-#import "QBUserStore.h"
+#import "QBUserContacts.h"
 
 @interface QBContactsViewController ()
 {
@@ -54,7 +54,7 @@
         if (granted) {
             ABRecordRef source = ABAddressBookCopyDefaultSource(addressBook);
             NSArray *myContacts = (__bridge NSArray *)(ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, kABPersonSortByFirstName));
-            [[QBUserStore sharedInstance] addContacts:myContacts];
+            [[QBUserContacts sharedInstance] addContacts:myContacts];
             [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
             [[self tableView] reloadData];
         }
@@ -109,7 +109,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[[QBUserStore sharedInstance] contacts] count]-1;
+    return [[[QBUserContacts sharedInstance] contacts] count]-1;
 }
 
 
@@ -120,7 +120,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:@"ContactCell"];
     }
-    ABRecordRef person = (__bridge ABRecordRef)([[[QBUserStore sharedInstance] contacts] objectAtIndex:[indexPath row]]);
+    ABRecordRef person = (__bridge ABRecordRef)([[[QBUserContacts sharedInstance] contacts] objectAtIndex:[indexPath row]]);
     NSString * firstName = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonFirstNameProperty));
     NSString * lastName = (__bridge NSString *)(ABRecordCopyValue(person, kABPersonLastNameProperty));
     NSString * space = [NSString stringWithFormat:@" "];
@@ -138,7 +138,7 @@
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if (cell.accessoryType == UITableViewCellAccessoryNone) {
-        ABRecordRef person = (__bridge ABRecordRef)([[[QBUserStore sharedInstance] contacts] objectAtIndex:[indexPath row]]);
+        ABRecordRef person = (__bridge ABRecordRef)([[[QBUserContacts sharedInstance] contacts] objectAtIndex:[indexPath row]]);
         NSString * number = [self phoneNumberForPerson:person];
         [recipients addObject: number];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

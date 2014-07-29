@@ -7,10 +7,12 @@
 //
 
 #import <Parse/Parse.h>
+#import "QBUserContacts.h"
 
 @interface QBUser : PFUser
 
 @property NSString * firstName;
 @property NSString * lastName;
-
+@property NSMutableArray * userHistory;
+@property QBUserContacts * contacts;
 @end

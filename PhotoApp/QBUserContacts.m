@@ -7,9 +7,9 @@
 //
 // This is a singleton that stores all of the user data
 
-#import "QBUserStore.h"
+#import "QBUserContacts.h"
 
-@implementation QBUserStore
+@implementation QBUserContacts
 {
     NSMutableArray * contacts;
 }
@@ -22,14 +22,14 @@
     return self;
 }
 
-+ (QBUserStore *) sharedInstance
++ (QBUserContacts *) sharedInstance
 {
-    static QBUserStore * _sharedInstance = nil;
+    static QBUserContacts * _sharedInstance = nil;
     
     static dispatch_once_t oncePredicate;
     
     dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[QBUserStore alloc] init];
+        _sharedInstance = [[QBUserContacts alloc] init];
     });
     
     return _sharedInstance;
