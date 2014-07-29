@@ -66,7 +66,7 @@
 
 - (void) returnToCameraView
 {
-    [self.delegate dismissContactsViewController];
+    [self.delegate dismissContactsViewController:self AndDismissPicture:NO];
 }
 
 - (void) sendPhoto
@@ -94,7 +94,7 @@
 - (void) messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [controller dismissViewControllerAnimated:YES completion:^{
-        [self returnToCameraView];
+        [self.delegate dismissContactsViewController:self AndDismissPicture:YES];
     }];
 }
 

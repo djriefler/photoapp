@@ -15,4 +15,5 @@
 @property NSString * lastName;
 @property NSMutableArray * userHistory;
 @property QBUserContacts * contacts;
+
 @end

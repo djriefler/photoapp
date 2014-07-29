@@ -18,6 +18,6 @@
 
 @protocol QBContactsViewControllerDelegate
 
-- (void) dismissContactsViewController;
+- (void) dismissContactsViewController: (QBContactsViewController *) cvc AndDismissPicture: (BOOL) dismissPicture;
 
 @end

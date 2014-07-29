@@ -139,9 +139,13 @@
     [self presentViewController:navController animated:YES completion:nil];
 }
 
-- (void) dismissContactsViewController
+- (void) dismissContactsViewController:(QBContactsViewController *)cvc AndDismissPicture:(BOOL)dismissPicture
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [cvc dismissViewControllerAnimated:YES completion:^{
+        if (dismissPicture) {
+            [self cancelTakingPicture];
+        }
+    }];
 }
 
 # pragma mark - Image Picker Delegate Methods
