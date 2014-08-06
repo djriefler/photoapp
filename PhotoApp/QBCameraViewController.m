@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Duncan Riefler. All rights reserved.
 //
 
-#import "QBViewController.h"
+#import "QBCameraViewController.h"
 #import "QBCameraOverlayView.h"
 #import "QBContactsViewController.h"
 #import <Parse/Parse.h>
 
-@interface QBViewController ()
+@interface QBCameraViewController ()
 {
     BOOL firstLoad;
 }
@@ -24,7 +24,9 @@
 
 @end
 
-@implementation QBViewController
+@implementation QBCameraViewController
+
+#pragma mark - Init Methods
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,10 +37,21 @@
     return self;
 }
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        firstLoad = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+    [self.view setBackgroundColor:[UIColor blackColor]];
+    
     // Set up image view where the image that we take will appear
     self.imageView = [[UIImageView alloc] init];
     // This is the wrong frame size. TODO: FIX
@@ -65,10 +78,20 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    // Check to see if device has a camera and the view hasn't been loaded yet
-    if (firstLoad == YES && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
-        firstLoad = NO;
-        [self setupImagePicker];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (!currentUser) {
+        QBLoginViewController * rvc = [[QBLoginViewController alloc] init];
+        rvc.delegate = self;
+        [self presentViewController:rvc animated:YES completion:NULL];
+    }
+    else {
+        // Check to see if device has a camera and the view hasn't been loaded yet
+        if (firstLoad == YES && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+            firstLoad = NO;
+            [self setupImagePicker];
+        }
     }
 }
 
@@ -130,6 +153,8 @@
     [self setupImagePicker];
 }
 
+# pragma mark - Contact View Controller Methods
+
 - (void) loadContactsPage
 {
     QBContactsViewController * cvc = [[QBContactsViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -146,6 +171,12 @@
             [self cancelTakingPicture];
         }
     }];
+}
+
+#pragma mark - QBLoginController Delegate Methods
+- (void) didLoginUser
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark - Image Picker Delegate Methods

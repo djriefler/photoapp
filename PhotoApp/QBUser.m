@@ -10,4 +10,6 @@
 
 @implementation QBUser
 
+@synthesize messages, contacts, phoneNumber, firstName, lastName;
+
 @end

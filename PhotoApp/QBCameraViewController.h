@@ -11,8 +11,10 @@
 #import <stdlib.h>
 #import "QBContactsViewController.h"
 #import "MBProgressHUD.h"
+#import "QBLoginViewController.h"
 
-@interface QBViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, QBContactsViewControllerDelegate>
+
+@interface QBCameraViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, QBContactsViewControllerDelegate, QBLogInDelegate>
 {
 
 }
