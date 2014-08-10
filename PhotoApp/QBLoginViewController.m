@@ -8,11 +8,7 @@
 
 #import "QBLoginViewController.h"
 #import "QBCameraViewController.h"
-<<<<<<< HEAD
 #import "QBConstants.h"
-=======
-#import "QBUser.h"
->>>>>>> 10ec72bbc8bf0cbe5f7cccb823120fdf703ad379
 
 @interface QBLoginViewController ()
 {
@@ -115,14 +111,7 @@
 
 - (void) signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
 {
-<<<<<<< HEAD
     [user setObject:user.username forKey:kQBUserUsername];
-=======
-    // Create new user
-    QBUser * newUser = [QBUser object];
-    [newUser setPassword:user.password];
-    [newUser setUsername:user.username];
->>>>>>> 10ec72bbc8bf0cbe5f7cccb823120fdf703ad379
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.delegate didLoginUser];
