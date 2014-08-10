@@ -12,7 +12,7 @@
 @interface QBContactsViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate>
 
 @property id delegate;
-@property UIImage * image;
+- (void) setImage:(UIImage *) img timeDelay:(NSString *) delay;
 
 @end
 

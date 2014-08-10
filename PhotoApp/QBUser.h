@@ -8,12 +8,15 @@
 
 #import <Parse/Parse.h>
 #import "QBUserContacts.h"
+#import "QBUserMessages.h"
+#import <Parse/PFObject+Subclass.h>
 
-@interface QBUser : PFUser
+@interface QBUser : PFUser <PFSubclassing>
 
 @property NSString * firstName;
 @property NSString * lastName;
-@property NSMutableArray * userHistory;
+@property NSString * phoneNumber;
 @property QBUserContacts * contacts;
+@property QBUserMessages * messages;
 
 @end

@@ -10,29 +10,29 @@
 	<string>PhotoApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>9C458BA5-E1D7-46F2-83A9-DF7B993B052E</key>
+		<key>21B96F7D5F44E80859939FF24A0B3F21CD8ECE83</key>
 		<string>ssh://github.com/djriefler/photoapp.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>PhotoApp.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>9C458BA5-E1D7-46F2-83A9-DF7B993B052E</key>
+		<key>21B96F7D5F44E80859939FF24A0B3F21CD8ECE83</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/djriefler/photoapp.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>9C458BA5-E1D7-46F2-83A9-DF7B993B052E</string>
+	<string>21B96F7D5F44E80859939FF24A0B3F21CD8ECE83</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>9C458BA5-E1D7-46F2-83A9-DF7B993B052E</string>
+			<string>21B96F7D5F44E80859939FF24A0B3F21CD8ECE83</string>
 			<key>IDESourceControlWCCName</key>
 			<string>PhotoApp</string>
 		</dict>

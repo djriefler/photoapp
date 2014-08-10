@@ -7,13 +7,23 @@
 //
 
 #import "QBContactsViewController.h"
+#import "QBConstants.h"
 #import <AddressBook/AddressBook.h>
 #import "QBUserContacts.h"
+#import "QBUser.h"
+#import "QBMessagesViewController.h"
 
 @interface QBContactsViewController ()
 {
     NSMutableArray * recipients;
 }
+
+@property (nonatomic, strong) PFFile *imageFile;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskID;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
+@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) NSString * timeDelay;
+
 @end
 
 @implementation QBContactsViewController
@@ -28,9 +38,18 @@
     return self;
 }
 
+- (void) setImage:(UIImage *)img timeDelay:(NSString *)delay
+{
+    self.image = img;
+    self.timeDelay = delay;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Start uploading the photo
+    [self shouldUploadImage:self.image];
     
     // Setup navbar
     [self setTitle:@"Send To..."];
@@ -45,7 +64,7 @@
     UIBarButtonItem * rightButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"send.png"]
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
-                                                                    action:@selector(sendPhoto)];
+                                                                    action:@selector(sendPhotoToOtherUser)];
     [self.navigationItem setRightBarButtonItem:rightButton];
     
     CFErrorRef *error = NULL;
@@ -64,12 +83,34 @@
     });
 }
 
+- (BOOL) shouldUploadImage: (UIImage *) img
+{
+    // Compress the image
+    NSData *imgData = UIImageJPEGRepresentation(img, 0.8f);
+    if (!imgData) {
+        return NO;
+    }
+    
+    self.imageFile = [PFFile fileWithData:imgData];
+    
+    // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+    self.fileUploadBackgroundTaskID = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskID];
+    }];
+    
+    [self.imageFile saveInBackgroundWithBlock:^(BOOL success, NSError *error) {
+        [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskID];
+    }];
+    
+    return YES;
+}
+
 - (void) returnToCameraView
 {
     [self.delegate dismissContactsViewController:self AndDismissPicture:NO];
 }
 
-- (void) sendPhoto
+- (void) sendPhotoViaText
 {
     MFMessageComposeViewController * messageComposer = [[MFMessageComposeViewController alloc] init];
     // Check to see if the user can send texts
@@ -87,6 +128,67 @@
             
         }
     }
+}
+
+- (void) sendPhotoToOtherUser
+{
+    // Make sure there were no errors creating the image file
+    if (!self.imageFile) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Couldn't send photo"
+                                                         message:nil
+                                                        delegate:nil
+                                               cancelButtonTitle:nil
+                                               otherButtonTitles:@"Dismiss", nil];
+        [alert show];
+        return;
+    }
+    
+    // Create photo PFObject
+    PFObject *photo = [PFObject objectWithClassName:kQBPhotoClassKey];
+    [photo setObject:[PFUser currentUser] forKey:kQBPhotoSenderKey];
+    [photo setObject:self.imageFile forKey:kQBPhotoPictureKey];
+    
+    // Mark the photo to be sent to multiple recipients (Do we create multiple photo objects?)
+//    for (PFUser *user in recipients) {
+//        
+//    }
+    
+    // Set photo permissions (Who can see the photo, who can edit it)
+    PFACL * photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+    [photoACL setPublicReadAccess:YES];
+    photo.ACL = photoACL;
+    
+    // Request a background execution task to allow us to finish uploading
+    // the photo even if the app is sent to the background
+    self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+    }];
+    
+    // Save the photo PFObject
+    [photo saveInBackgroundWithBlock:^(BOOL success, NSError *error){
+        if (success) {
+            // TODO: Notify user that photo was sent (In snapchat they change the icon on the messageDisplay controller)
+            // Maybe have a local cache of the messages sent and received with a state (pending, sent, received, opened, etc)
+            // Update the cache, then send an NSNotification which will be received by the messages view controller
+        }
+        else {
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Couldn't send your photo"
+                                                             message:nil
+                                                            delegate:nil
+                                                   cancelButtonTitle:nil
+                                                   otherButtonTitles:@"dismiss", nil];
+            [alert show];
+        }
+        
+        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+    }];
+    
+    // Dismiss this screen (Uncomment this and fix view controller hierarchy
+//    [self.delegate dismissContactsViewController:self AndDismissPicture:YES];
+    
+    // Create a messages view controller
+    QBMessagesViewController * qbmvc = [[QBMessagesViewController alloc] initWithStyle:UITableViewStylePlain];
+    [self.navigationController pushViewController:qbmvc animated:YES];
 }
 
 #pragma mark - MFMessageComposer Methods
