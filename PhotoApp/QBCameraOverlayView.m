@@ -37,6 +37,7 @@
         //set up capture image button
         self.captureImagebutton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - CAPTURE_IMAGE_BUTTON_WIDTH/2, self.bounds.size.height - (CAPTURE_IMAGE_BUTTON_HEIGHT + 20), CAPTURE_IMAGE_BUTTON_WIDTH, CAPTURE_IMAGE_BUTTON_HEIGHT)];
         [self.captureImagebutton setBackgroundColor:[UIColor clearColor]];
+
         [self.captureImagebutton setBackgroundImage:whiteCircle forState:UIControlStateNormal];
         [self.captureImagebutton setBackgroundImage:redCircle forState:UIControlStateHighlighted];
         self.captureImagebutton.alpha = 0.7;
@@ -55,7 +56,7 @@
         subCameraButton.alpha = 1.0;
 
         [self.captureImagebutton addSubview:subCameraButton];
-                
+        
         //set up flip camera view button
         self.flipCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - FLIP_CAMERA_BUTTON_WIDTH/2,20, FLIP_CAMERA_BUTTON_WIDTH, FLIP_CAMERA_BUTTON_HEIGHT)];
         [self.flipCameraButton setBackgroundColor:[UIColor lightGrayColor]];
