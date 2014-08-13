@@ -20,8 +20,8 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     // Connect to Parse backend
-    [Parse setApplicationId:@"Zqyq6pTT8OoWmPxeGr9JwX2gnDDCQY23CfO6Ptpw"
-                  clientKey:@"TqC0H4zYXcxkwEb0kuCLwrQ1gaUSPntvF8GcIMlx"];
+    [Parse setApplicationId:@"O3HKQ0wOgHtBy1VGroG877G88ESKFC5zip1FFDne"
+                  clientKey:@"8b4yBd0Z1qGaFCha0UH8ahMmjs1MPCyG06XlUhwu"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
     QBCameraViewController * cvc = [[QBCameraViewController alloc] init];
