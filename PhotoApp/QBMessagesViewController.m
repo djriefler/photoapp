@@ -44,11 +44,17 @@
 
 - (PFQuery *) queryForTable
 {
-    PFQuery * query = [PFQuery queryWithClassName:kQBPhotoClassKey];
-    [query whereKey:kQBPhotoSenderKey equalTo:[PFUser currentUser]];
-    [query whereKeyExists:kQBPhotoSenderKey];
-    [query includeKey:kQBPhotoReceiverKey];
+    // Create one query for getting all the photos that the user has sent
+    PFQuery * sentPhotosQuery = [PFQuery queryWithClassName:kQBPhotoClassKey];
+    [sentPhotosQuery whereKey:kQBPhotoSenderKey equalTo:[PFUser currentUser]];
 
+    // Create another query for getting all the photos that have been sent to the user
+    PFQuery * receivedPhotosQuery = [PFQuery queryWithClassName:kQBPhotoClassKey];
+    [receivedPhotosQuery whereKey:kQBPhotoReceiverKey equalTo:[PFUser currentUser]];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:sentPhotosQuery, receivedPhotosQuery, nil]];
+    [query includeKey:kQBPhotoReceiverKey];
+    [query includeKey:kQBPhotoSenderKey];
     [query orderByDescending:@"createdAt"];
     
     return query;
@@ -59,7 +65,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - UITable View Delegate methods
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    NSInteger sections = self.objects.count;
+    return sections;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+#pragma mark - UITableViewDelegate methods
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object
 {
     static NSString * cellID = @"MessageCell";
@@ -68,18 +85,20 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     
-    PFUser * sender = [object objectForKey:kQBPhotoSenderKey];
-    [sender fetchIfNeeded];
-//    PFUser * receiver = [object objectForKey:kQBPhotoReceiverKey];
     NSString * cellLabel;
     UIColor * cellColor;
-    if ([sender isEqual:[PFUser currentUser]]) {
-        cellColor = [UIColor blueColor];
-//        cellLabel = receiver.username;
-    }
-    else {
-        cellColor = [UIColor greenColor];
-        cellLabel = [sender objectForKey:kQBUserUsername];
+    if (object) {
+        NSString * photoSenderUsername = [[object objectForKey:kQBPhotoSenderKey] objectForKey:kQBUserUsername];
+        NSString * currentUserUsername = [[PFUser currentUser] objectForKey:kQBUserUsername];
+        // If the current user sent this photo, display one type of cell
+        if ([photoSenderUsername isEqual:currentUserUsername]) {
+            cellColor = [UIColor blueColor];
+        }
+        // If the current user received this photo display another type of cell
+        else {
+            cellColor = [UIColor greenColor];
+            //        cellLabel = [sender objectForKey:kQBUserUsername];
+        }
     }
     [cell.textLabel setText:cellLabel];
     [cell setBackgroundColor:cellColor];

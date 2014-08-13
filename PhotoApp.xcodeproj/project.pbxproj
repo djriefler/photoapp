@@ -21,6 +21,7 @@
 		7E63060619906F300075C0D9 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E63060519906F300075C0D9 /* Accounts.framework */; };
 		7E630609199072FD0075C0D9 /* QBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E630608199072FD0075C0D9 /* QBLoginViewController.m */; };
 		7E63060B1991E4650075C0D9 /* camera-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E63060A1991E4650075C0D9 /* camera-64.png */; };
+		7E770156199AFF9500C6BA1D /* QBFindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E770155199AFF9500C6BA1D /* QBFindFriendsViewController.m */; };
 		7EA8AA16195A824500A9D413 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8AA15195A824500A9D413 /* MBProgressHUD.m */; };
 		7EA8AA1A195BC09400A9D413 /* QBCameraOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8AA19195BC09400A9D413 /* QBCameraOverlayView.m */; };
 		7EA8AA1D195E56EE00A9D413 /* QBContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EA8AA1C195E56EE00A9D413 /* QBContactsViewController.m */; };
@@ -83,6 +84,8 @@
 		7E630607199072FD0075C0D9 /* QBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBLoginViewController.h; sourceTree = "<group>"; };
 		7E630608199072FD0075C0D9 /* QBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBLoginViewController.m; sourceTree = "<group>"; };
 		7E63060A1991E4650075C0D9 /* camera-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-64.png"; sourceTree = "<group>"; };
+		7E770154199AFF9500C6BA1D /* QBFindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBFindFriendsViewController.h; sourceTree = "<group>"; };
+		7E770155199AFF9500C6BA1D /* QBFindFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBFindFriendsViewController.m; sourceTree = "<group>"; };
 		7EA8AA14195A824500A9D413 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		7EA8AA15195A824500A9D413 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		7EA8AA18195BC09400A9D413 /* QBCameraOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QBCameraOverlayView.h; sourceTree = "<group>"; };
@@ -194,6 +197,7 @@
 		7E0619C41996AA8400860CBC /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7E770153199AF7D200C6BA1D /* Find Friends */,
 				7E0619C11996AA4000860CBC /* Login/Sign Up */,
 				7E0619C21996AA4B00860CBC /* Take Picure */,
 				7E0619C61996AAB600860CBC /* Send Photo */,
@@ -231,6 +235,15 @@
 				7E0619CC1996B73B00860CBC /* QBMessagesViewController.m */,
 			);
 			name = ReceivePhoto;
+			sourceTree = "<group>";
+		};
+		7E770153199AF7D200C6BA1D /* Find Friends */ = {
+			isa = PBXGroup;
+			children = (
+				7E770154199AFF9500C6BA1D /* QBFindFriendsViewController.h */,
+				7E770155199AFF9500C6BA1D /* QBFindFriendsViewController.m */,
+			);
+			name = "Find Friends";
 			sourceTree = "<group>";
 		};
 		7EA8AA17195A824D00A9D413 /* MBProgressHUD */ = {
@@ -464,6 +477,7 @@
 				7EF5A42519500EA4007DAD6C /* QBAppDelegate.m in Sources */,
 				7E0619CA1996ABE600860CBC /* QBConstants.m in Sources */,
 				7EA8AA1D195E56EE00A9D413 /* QBContactsViewController.m in Sources */,
+				7E770156199AFF9500C6BA1D /* QBFindFriendsViewController.m in Sources */,
 				7E0619CD1996B73B00860CBC /* QBMessagesViewController.m in Sources */,
 				7E026C1119906439008BAE7B /* QBUserMessages.m in Sources */,
 				7EA8AA201961252600A9D413 /* QBUser.m in Sources */,

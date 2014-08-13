@@ -147,7 +147,7 @@
     PFObject *photo = [PFObject objectWithClassName:kQBPhotoClassKey];
     [photo setObject:[PFUser currentUser] forKey:kQBPhotoSenderKey];
     [photo setObject:self.imageFile forKey:kQBPhotoPictureKey];
-    
+
     // Mark the photo to be sent to multiple recipients (Do we create multiple photo objects?)
 //    for (PFUser *user in recipients) {
 //        
