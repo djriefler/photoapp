@@ -8,16 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import "QBPhoto.h"
 
-@interface QBContactsViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, MFMessageComposeViewControllerDelegate>
+@interface QBContactsViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property id delegate;
-- (void) setImage:(UIImage *) img timeDelay:(NSString *) delay;
+- (void) setPhoto:(QBPhoto *) photo;
 
 @end
 
 @protocol QBContactsViewControllerDelegate
 
-- (void) dismissContactsViewController: (QBContactsViewController *) cvc AndDismissPicture: (BOOL) dismissPicture;
+- (void) userWillSendPhotoToRecipients:(NSMutableArray *) recipients;
+- (void) userCancelledSendingPhoto;
 
 @end

@@ -16,12 +16,14 @@
 {
     BOOL firstLoad;
 }
+
 @property QBCameraOverlayView * cameraOverlay;
 @property (nonatomic) UIImagePickerController * imagePicker;
 @property (nonatomic)  UIImageView * imageView;
-
 @property (nonatomic) UIButton * cancelButton;
 @property (nonatomic) UIButton * sendButton;
+@property (nonatomic) UIButton * timeDelayButton;
+@property UITableView * timeDelayTable;
 
 @end
 
@@ -33,7 +35,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        firstLoad = YES;
+
     }
     return self;
 }
@@ -62,39 +64,36 @@
     [self.view addSubview:self.imageView];
     
     // Set up cancel button
-    _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 60, 40, 40)];
+    _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 20, 30, 30)];
     [self.view addSubview:_cancelButton ];
-    [_cancelButton setBackgroundColor:[UIColor redColor]];
+    [_cancelButton setBackgroundImage:[UIImage imageNamed:@"cancel-48.png"] forState:UIControlStateNormal];
     [_cancelButton addTarget:self action:@selector(cancelTakingPicture) forControlEvents:UIControlEventTouchUpInside];
     [_cancelButton setHidden:YES];
     
-    // Set up send button (will send photo to the cloud)
+    // Set up time delay button
+    _timeDelayButton = [[UIButton alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height - 60, 40, 40)];
+    [self.view addSubview:_timeDelayButton];
+    [_timeDelayButton setBackgroundImage:[UIImage imageNamed:@"hourglass-64.png"] forState:UIControlStateNormal];
+    [_timeDelayButton addTarget:self action:@selector(timeDelayButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [_timeDelayTable setHidden:YES];
+    
+    // Set up send button
     _sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 60, self.view.frame.size.height - 60, 40, 40)];
     [self.view addSubview:_sendButton];
-    [_sendButton setBackgroundColor:[UIColor greenColor]];
-    [_sendButton addTarget:self action:@selector(loadContactsPage) forControlEvents:UIControlEventTouchUpInside];
+    [_sendButton setBackgroundImage:[UIImage imageNamed:@"send-64.png"] forState:UIControlStateNormal];
+    [_sendButton addTarget:self action:@selector(sendPhoto) forControlEvents:UIControlEventTouchUpInside];
     [_sendButton setHidden:YES];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    PFUser *currentUser = [PFUser currentUser];
-    
-    if (!currentUser) {
-        QBLoginViewController * rvc = [[QBLoginViewController alloc] init];
-        rvc.delegate = self;
-        [self presentViewController:rvc animated:YES completion:NULL];
+
+    // Check to see if device has a camera and the view hasn't been loaded yet
+    if (firstLoad == YES && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
+        firstLoad = NO;
+        [self setupImagePicker];
     }
-    else {
-        // Check to see if device has a camera and the view hasn't been loaded yet
-        if (firstLoad == YES && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == YES) {
-            firstLoad = NO;
-            [self setupImagePicker];
-        }
-    }
-    [currentUser setObject:currentUser.username forKey:kQBUserUsername];
 }
 
 - (void) setupImagePicker
@@ -103,7 +102,8 @@
     _imagePicker = [[UIImagePickerController alloc] init];
     _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     _imagePicker.modalPresentationStyle = UIModalPresentationFullScreen;
-    
+    [_imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
+
     // Next few lines of code make it so that the camera is full screen like snapchat versus like the regular camera.
     //Camera is 426 * 320. Screen height is 568.  Multiply by 1.333 in 5 inch to fill vertical
     CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, 71.0); //This slots the preview exactly in the middle of the screen by moving it down 71 points
@@ -124,8 +124,12 @@
     // Set the imageCaptureButton in the CameraOverlayClass to take a picture when tapped on
     [_cameraOverlay.captureImagebutton addTarget:self action:@selector(takePicture) forControlEvents:UIControlEventTouchUpInside];
     
-    //Set the flipCameraButton in the CameraOverlayClass to take a picture when tapped on
+    // Set the flipCameraButton to switch cameras when tapped on
     [_cameraOverlay.flipCameraButton addTarget:self action:@selector(flipCamera) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Set the flash button to toggle flash when tapped on
+    [_cameraOverlay.flashButton addTarget:self action:@selector(toggleFlash) forControlEvents:UIControlEventTouchUpInside];
+
 }
 
 - (void) flipCamera
@@ -140,24 +144,30 @@
 
 - (void) takePicture
 {
+    
+    // Perform animation to rotate the camera button
     CGAffineTransform rotateTransform = CGAffineTransformMakeRotation(360.0);
-    CGAffineTransform scaleTransform = CGAffineTransformMakeScale(1.2, 1.2);
-    CGAffineTransform transform = CGAffineTransformConcat(rotateTransform, scaleTransform);
+//    CGAffineTransform scaleTransform = CGAffineTransformMakeScale(1.2, 1.2);
+//    CGAffineTransform transform = CGAffineTransformConcat(rotateTransform, scaleTransform);
     [UIView animateWithDuration:0.5
                           delay:0
          usingSpringWithDamping:0.8
           initialSpringVelocity:1.0
                         options:0
                      animations:^{
-                         self.cameraOverlay.captureImagebutton.transform = transform;
+                         self.cameraOverlay.captureImagebutton.transform = rotateTransform;
                      }
                      completion:nil];
+    
+    // Transform the image to make it sized properly
     if(_imagePicker.cameraDevice == UIImagePickerControllerCameraDeviceRear) {
         self.imageView.transform = CGAffineTransformMakeScale(1.33, 1.0);
     }
     else {
         self.imageView.transform = CGAffineTransformMakeScale(-1.33, 1.0);
     }
+    
+    
     [self.imagePicker takePicture];
 }
 
@@ -167,30 +177,54 @@
     [self setupImagePicker];
 }
 
-# pragma mark - Contact View Controller Methods
-
-- (void) loadContactsPage
+- (void) toggleFlash
 {
-    QBContactsViewController * cvc = [[QBContactsViewController alloc] initWithStyle:UITableViewStylePlain];
-    [cvc setImage:_imageView.image timeDelay:@"2 hours"];
-    cvc.delegate = self;
-    UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:cvc];
-    [self presentViewController:navController animated:YES completion:nil];
+    if ([_imagePicker cameraFlashMode] == YES) {
+        [self.cameraOverlay setFlashOn:NO];
+        [self.imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
+    }
+    else {
+        [self.cameraOverlay setFlashOn:YES];
+        [self.imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOn];
+    }
 }
 
-- (void) dismissContactsViewController:(QBContactsViewController *)cvc AndDismissPicture:(BOOL)dismissPicture
+- (void) timeDelayButtonPressed
 {
-    [cvc dismissViewControllerAnimated:YES completion:^{
-        if (dismissPicture) {
-            [self cancelTakingPicture];
-        }
-    }];
+    if (!_timeDelayTable) {
+        _timeDelayTable = [[UITableView alloc] initWithFrame:CGRectMake(5, _timeDelayButton.frame.origin.y - 220, 80, 20) style:UITableViewStylePlain];
+        _timeDelayTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _timeDelayTable.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5];
+        _timeDelayTable.showsVerticalScrollIndicator = NO;
+        _timeDelayTable.bounces = NO;
+        [_timeDelayTable setHidden:YES];
+        [_timeDelayTable.layer setCornerRadius:5.0f];
+        _timeDelayTable.delegate = self;
+        _timeDelayTable.dataSource = self;
+        [self.view addSubview:_timeDelayTable];
+    }
+    if ([_timeDelayTable isHidden]) {
+        [_timeDelayTable setHidden:NO];
+        [_timeDelayTable setFrame:CGRectMake(5, _timeDelayButton.frame.origin.y - 220, 80, 20)];
+        [UIView animateWithDuration:0.3
+                              delay:0
+             usingSpringWithDamping:0.9
+              initialSpringVelocity:0.7
+                            options:0
+                         animations:^{
+                             _timeDelayTable.frame = CGRectMake(5, _timeDelayButton.frame.origin.y - 220, 80, 200);
+                         }completion:^(BOOL success){
+                             
+                         }];
+    }
 }
 
-#pragma mark - QBLoginController Delegate Methods
-- (void) didLoginUser
+- (void) sendPhoto
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    QBPhoto * photo = [[QBPhoto alloc] init];
+    photo.timeDelay = 5;
+    photo.image = _imageView.image;
+    [self.delegate userWantsSendPhoto:photo];
 }
 
 # pragma mark - Image Picker Delegate Methods
@@ -214,49 +248,40 @@
     [_sendButton setUserInteractionEnabled:YES];
 }
 
-
-#pragma mark - Parse related methods
-- (void) sendPicture
+#pragma mark - UITableViewDataSource
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Resize image
-    UIImage * image = _imageView.image;
-    UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-    [image drawInRect:CGRectMake(0, 0, 640, 960)];
-    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    // Convert to data to send to the cloud
-    NSData *imageData = UIImageJPEGRepresentation(smallImage, 0.05f);
-    [self uploadImage: imageData];
+    return 1;
 }
 
-- (void) uploadImage:(NSData *) imageData
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    PFFile * imageFile = [PFFile fileWithName:@"snap.jpg" data:imageData];
-    
-    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-        if (!error) {
-            PFObject * userPhoto = [PFObject objectWithClassName:@"UserPhoto"];
-            [userPhoto setObject:imageFile forKey:@"imageFile"];
-            PFUser * user = [PFUser currentUser];
-            [userPhoto setObject:user forKey:@"user"];
-            
-            [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (!error) {
-                    NSLog(@"UserPhoto object successfully created!");
-                }
-                else {
-                    NSLog(@"Error: %@ %@", error, [error userInfo]);
-                }
-            }];
-        }
-        else {
-            
-        }
-        
-    } progressBlock:^(int percentDone) {
-                               // Update your progress spinner here. percentDone will be between 0 and 100.
-//                               HUD.progress = (float)percentDone/100;
-                           }];
+    return 12;
+}
+
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * cellID = @"TimeCell";
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
+    [cell setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5]];
+    [cell.textLabel setText:[NSString stringWithFormat:@"%ld hr",(long)indexPath.row+1]];
+    [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+
+#pragma mark - Touch Methods
+
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if(_timeDelayTable) {
+        [_timeDelayTable setHidden:YES];
+    }
 }
 
 #pragma mark - Etc

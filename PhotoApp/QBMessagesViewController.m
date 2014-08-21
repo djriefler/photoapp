@@ -8,6 +8,7 @@
 
 #import "QBMessagesViewController.h"
 #import "QBConstants.h"
+#import "QBPhotoViewController.h"
 
 @interface QBMessagesViewController ()
 
@@ -53,7 +54,7 @@
     [receivedPhotosQuery whereKey:kQBPhotoReceiverKey equalTo:[PFUser currentUser]];
     
     PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:sentPhotosQuery, receivedPhotosQuery, nil]];
-    [query includeKey:kQBPhotoReceiverKey];
+//    [query includeKey:kQBPhotoReceiverKey];
     [query includeKey:kQBPhotoSenderKey];
     [query orderByDescending:@"createdAt"];
     
@@ -86,24 +87,37 @@
     }
     
     NSString * cellLabel;
-    UIColor * cellColor;
     if (object) {
         NSString * photoSenderUsername = [[object objectForKey:kQBPhotoSenderKey] objectForKey:kQBUserUsername];
         NSString * currentUserUsername = [[PFUser currentUser] objectForKey:kQBUserUsername];
+//        NSString * photoRecipientUsername = 
+        
         // If the current user sent this photo, display one type of cell
         if ([photoSenderUsername isEqual:currentUserUsername]) {
-            cellColor = [UIColor blueColor];
+            cellLabel = @"Jack";
         }
         // If the current user received this photo display another type of cell
         else {
-            cellColor = [UIColor greenColor];
-            //        cellLabel = [sender objectForKey:kQBUserUsername];
+            cellLabel = photoSenderUsername;
         }
     }
     [cell.textLabel setText:cellLabel];
-    [cell setBackgroundColor:cellColor];
     
     return cell;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    PFObject *photoObject = [self.objects objectAtIndex:indexPath.row];
+    PFFile * imageFile = [photoObject objectForKey:kQBPhotoPictureKey];
+    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        if (!error) {
+            UIImage *image = [UIImage imageWithData:data];
+            QBPhotoViewController * photoViewController = [[QBPhotoViewController alloc] initWithPhoto:image];
+            [self presentViewController:photoViewController animated:YES completion:nil];
+        }
+    }];
 }
 
 /*

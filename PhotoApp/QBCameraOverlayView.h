@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface QBCameraOverlayView : UIView
+@property (nonatomic) BOOL flashOn;
 @property (nonatomic) UIButton * captureImagebutton;
 @property (nonatomic) UIButton * flipCameraButton;
+@property (nonatomic) UIButton * flashButton;
 @end

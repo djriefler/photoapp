@@ -11,15 +11,14 @@
 #define CAPTURE_IMAGE_BUTTON_WIDTH 64
 #define CAPTURE_IMAGE_BUTTON_HEIGHT 64
 
-#define FLIP_CAMERA_BUTTON_WIDTH 45
-#define FLIP_CAMERA_BUTTON_HEIGHT 45
-
-
 @interface QBCameraOverlayView ()
-
+@property UIImage * flashImage;
+@property UIImage * flashOnImage;
+@property UIImage * flashOffImage;
 @end
 
 @implementation QBCameraOverlayView
+@synthesize flashOn;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -33,46 +32,83 @@
         UIImage * blackCircle = [UIImage imageNamed:@"black-circle-icon-64.png"];
         UIImage * blackOutlineCircle = [UIImage imageNamed:@"black-circle-outline-icon-64.png"];
         UIImage * blackDashedOutlineCircle = [UIImage imageNamed:@"circle-dashed-8-icon-64.png"];
-
+        UIImage * cameraIcon = [UIImage imageNamed:@"camera-icon-64.png"];
+        _flashOnImage = [UIImage imageNamed:@"flash-64x64.png"];
+        _flashOffImage = [UIImage imageNamed:@"no-flash-64x64.png"];
+        _flashImage = _flashOnImage;
         //set up capture image button
-        self.captureImagebutton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - CAPTURE_IMAGE_BUTTON_WIDTH/2, self.bounds.size.height - (CAPTURE_IMAGE_BUTTON_HEIGHT + 20), CAPTURE_IMAGE_BUTTON_WIDTH, CAPTURE_IMAGE_BUTTON_HEIGHT)];
+        float borderOffset = 10;
+        CGPoint captureButtonPosition = CGPointMake(self.bounds.size.width/2 - CAPTURE_IMAGE_BUTTON_WIDTH/2, self.bounds.size.height - (CAPTURE_IMAGE_BUTTON_HEIGHT + borderOffset));
+        CGSize captureImageButtonSize = CGSizeMake(64, 64);
+        
+        self.captureImagebutton = [[UIButton alloc] initWithFrame:CGRectMake(captureButtonPosition.x, captureButtonPosition.y, captureImageButtonSize.width, captureImageButtonSize.height)];
         [self.captureImagebutton setBackgroundColor:[UIColor clearColor]];
-
         [self.captureImagebutton setBackgroundImage:whiteCircle forState:UIControlStateNormal];
-        [self.captureImagebutton setBackgroundImage:redCircle forState:UIControlStateHighlighted];
-        self.captureImagebutton.alpha = 0.7;
+        self.captureImagebutton.alpha = 1.0;
         self.captureImagebutton.layer.cornerRadius = 50.0;
         [self.captureImagebutton setUserInteractionEnabled:YES];
         [self addSubview:self.captureImagebutton];
+        self.captureImagebutton.transform = CGAffineTransformMakeScale(1.0, 1.0);
         
-        self.captureImagebutton.transform = CGAffineTransformMakeScale(1.2, 1.2);
+//        UIButton * subCameraButton1 = [[UIButton alloc] initWithFrame:self.captureImagebutton.bounds];
+//        [subCameraButton1 setUserInteractionEnabled:NO];
+//        [subCameraButton1 setBackgroundColor:[UIColor clearColor]];
+//        [subCameraButton1 setBackgroundImage:whiteCircle forState:UIControlStateNormal];
+//        [subCameraButton1 setBackgroundImage:redCircle forState:UIControlStateHighlighted];
+//        subCameraButton1.transform = CGAffineTransformMakeScale(1.00, 1.00);
+//        subCameraButton1.alpha = 0.3;
+//        subCameraButton1.transform = CGAffineTransformMakeScale(0.7, 0.7);
+//        [self.captureImagebutton addSubview:subCameraButton1];
         
+        UIButton * subCameraButton2 = [[UIButton alloc] initWithFrame:self.captureImagebutton.bounds];
+        [subCameraButton2 setUserInteractionEnabled:NO];
+        [subCameraButton2 setBackgroundColor:[UIColor clearColor]];
+        [subCameraButton2 setBackgroundImage:cameraIcon forState:UIControlStateNormal];
+        subCameraButton2.transform = CGAffineTransformMakeScale(1.00, 1.00);
+        subCameraButton2.alpha = 1.0;
+        subCameraButton2.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        [self.captureImagebutton addSubview:subCameraButton2];
         
-        UIButton * subCameraButton = [[UIButton alloc] initWithFrame:self.captureImagebutton.bounds];
-        [subCameraButton setUserInteractionEnabled:NO];
-        [subCameraButton setBackgroundColor:[UIColor clearColor]];
-        [subCameraButton setBackgroundImage:blackOutlineCircle forState:UIControlStateNormal];
-        subCameraButton.transform = CGAffineTransformMakeScale(1.05, 1.05);
-        subCameraButton.alpha = 1.0;
-
-        [self.captureImagebutton addSubview:subCameraButton];
+        // Set up other buttons
+        float buttonWidth = 45;
+        float buttonHeight = 45;
         
-        //set up flip camera view button
-        self.flipCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width/2 - FLIP_CAMERA_BUTTON_WIDTH/2,20, FLIP_CAMERA_BUTTON_WIDTH, FLIP_CAMERA_BUTTON_HEIGHT)];
-        [self.flipCameraButton setBackgroundColor:[UIColor lightGrayColor]];
+        //Set up flip camera view button
+        CGPoint flipCameraButtonPosition = CGPointMake(self.bounds.size.width - buttonWidth - borderOffset, borderOffset);
+        self.flipCameraButton = [[UIButton alloc] initWithFrame:CGRectMake(flipCameraButtonPosition.x, flipCameraButtonPosition.y, buttonWidth, buttonHeight)];
+        [self.flipCameraButton setBackgroundImage:[UIImage imageNamed:@"switchCamera.png"] forState:UIControlStateNormal];
         [self.flipCameraButton setUserInteractionEnabled:YES];
         [self addSubview:self.flipCameraButton];
+        
+        // Set up flash button
+        CGPoint flashButtonPosition = CGPointMake(borderOffset, borderOffset);
+        self.flashButton = [[UIButton alloc] initWithFrame:CGRectMake(flashButtonPosition.x, flashButtonPosition.y, buttonWidth, buttonHeight)];
+        [self.flashButton setTintColor:[UIColor blackColor]];
+        [self.flashButton setBackgroundImage:_flashImage forState:UIControlStateNormal];
+        [self.flashButton setUserInteractionEnabled:YES];
+        [self addSubview:self.flashButton];
     }
     return self;
+}
+
+- (void) setFlashOn:(BOOL)flash
+{
+    if (flash == YES) {
+        [self.flashButton setBackgroundImage:_flashOffImage forState:UIControlStateNormal];
+    }
+    else {
+        [self.flashButton setBackgroundImage:_flashOnImage forState:UIControlStateNormal];
+    }
+    flashOn = !flashOn;
 }
 
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    
-}
+//- (void)drawRect:(CGRect)rect
+//{
+//    
+//}
 
 
 @end

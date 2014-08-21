@@ -27,7 +27,7 @@
     [super viewDidAppear:animated];
     PFUser *currentUser = [PFUser currentUser];
 
-    if (!currentUser) {
+//    if (!currentUser) {
         // Create login controller
         PFLogInViewController * loginViewController = [[PFLogInViewController alloc] init];
         [loginViewController setDelegate:self];
@@ -40,7 +40,7 @@
         
         [self presentViewController:loginViewController animated:YES completion:nil];
 
-    }
+//    }
 }
 
 - (void) presentCameraViewControllerAnimated:(BOOL) animated

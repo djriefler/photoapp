@@ -12,6 +12,7 @@
 
 + (QBUserContacts *) sharedInstance;
 - (NSArray *) contacts;
+- (NSArray *) fakeContacts;
 - (void) addContact:(id) contact;
 - (void) addContacts: (NSArray *) cntcts;
 @end

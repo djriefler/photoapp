@@ -12,12 +12,17 @@
 #import "QBContactsViewController.h"
 #import "MBProgressHUD.h"
 #import "QBLoginViewController.h"
+#import "QBPhoto.h"
 
+@interface QBCameraViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@interface QBCameraViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, QBContactsViewControllerDelegate, QBLogInDelegate>
-{
+@property id delegate;
+- (void) cancelTakingPicture;
 
-}
+@end
 
+@protocol QBCameraViewControllerDelegate
+
+- (void) userWantsSendPhoto: (QBPhoto *) photo;
 
 @end

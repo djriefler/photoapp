@@ -8,6 +8,7 @@
 // This is a singleton that stores all of the user data
 
 #import "QBUserContacts.h"
+#import "QBUser.h"
 
 @implementation QBUserContacts
 {
@@ -44,6 +45,37 @@
 {
     [contacts addObjectsFromArray:cntcts];
     [self cleanContacts];
+}
+
+- (NSArray *) fakeContacts
+{
+    NSMutableArray * fakeContacts = [[NSMutableArray alloc] init];
+    NSString * name1 = @"James";
+    NSString * name2 = @"Jill";
+    NSString * name3 = @"Bob";
+    NSString * name4 = @"Tom";
+    NSString * name5 = @"Sarah";
+    NSString * name6 = @"Brandy";
+    NSString * name7 = @"Jennifer";
+    NSString * name8 = @"Rex";
+    NSString * name9 = @"James";
+    NSString * name10 = @"Jill";
+    NSString * name11 = @"Bob";
+    NSString * name12 = @"Tom";
+    [fakeContacts addObject:name1];
+    [fakeContacts addObject:name2];
+    [fakeContacts addObject:name3];
+    [fakeContacts addObject:name4];
+    [fakeContacts addObject:name5];
+    [fakeContacts addObject:name6];
+    [fakeContacts addObject:name7];
+    [fakeContacts addObject:name8];
+    [fakeContacts addObject:name9];
+    [fakeContacts addObject:name10];
+    [fakeContacts addObject:name11];
+    [fakeContacts addObject:name12];
+
+    return fakeContacts;
 }
 
 - (void) cleanContacts

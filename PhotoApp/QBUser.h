@@ -11,7 +11,7 @@
 #import "QBUserMessages.h"
 #import <Parse/PFObject+Subclass.h>
 
-@interface QBUser : PFUser <PFSubclassing>
+@interface QBUser : NSObject
 
 @property NSString * firstName;
 @property NSString * lastName;

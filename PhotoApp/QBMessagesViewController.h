@@ -11,3 +11,8 @@
 @interface QBMessagesViewController : PFQueryTableViewController
 
 @end
+
+@protocol QBMessageViewControllerDelegate
+
+
+@end

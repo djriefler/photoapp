@@ -9,6 +9,7 @@
 #import "QBAppDelegate.h"
 #import "QBCameraViewController.h"
 #import "QBLoginViewController.h"
+#import "QBRootViewController.h"
 
 @implementation QBAppDelegate
 
@@ -23,13 +24,9 @@
     [Parse setApplicationId:@"O3HKQ0wOgHtBy1VGroG877G88ESKFC5zip1FFDne"
                   clientKey:@"8b4yBd0Z1qGaFCha0UH8ahMmjs1MPCyG06XlUhwu"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-    
-    QBCameraViewController * cvc = [[QBCameraViewController alloc] init];
-    self.window.rootViewController = cvc;
 
-
-//    QBRootViewController * rvc = [[QBRootViewController alloc] init];
-//    self.window.rootViewController = rvc;
+    QBRootViewController * rvc = [[QBRootViewController alloc] init];
+    self.window.rootViewController = rvc;
     [self.window makeKeyAndVisible];
 
     return YES;
